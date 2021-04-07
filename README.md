@@ -1,5 +1,5 @@
 # SuperMart
-WIth the Internet Booom and Social Media as well as the Pandemic, the growth of online shopping practices have just gone up, and which customer does not like items to be personalized and make them feel at home? Similarity search and recommendation systems have shown us how the big tech firms make global impact and control the world.
+WIth the Internet Boom and Social Media as well as the Pandemic, the growth of online shopping practices have just gone up, and which customer does not like items to be personalized and make them feel at home? Similarity search and recommendation systems have shown us how the big tech firms make global impact and control the world.
 So for every unique customer, we need to have well curated and peronalized list of products ready, because if the company does no invest in it, the customer will just move to someone who understands them better
 
 -Here segmentation of users based on RFM modelling has been performed and Personalized recommendations based on Collaborative filtering is implemented 
