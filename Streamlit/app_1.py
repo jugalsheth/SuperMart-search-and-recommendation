@@ -2,18 +2,16 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import numpy as np
-import boto3 
+import boto3
 from io import StringIO
 
-
+import os
+os.chdir('/home/kanishka/data_science/PythonCode/SuperMart/SuperMart/Streamlit')
 
 
 def main():
 
-	s3 = boto3.client('s3',
-    aws_access_key_id='AKIA23BAKCQNGUI37HPT',
-    aws_secret_access_key='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')
-    
+
 
 	page_bg_img = '''
 	<style>
@@ -47,45 +45,38 @@ def main():
 	st.markdown(page_bg_img, unsafe_allow_html=True)
 
 	## Databases
-	pass_obj = s3.get_object(Bucket = 'superstoreapp' , Key = 'Passwords.csv')
-	pass_body=pass_obj['Body']
-	pass_csv_string = pass_body.read().decode('utf-8')
-	pass_data=pd.read_csv(StringIO(pass_csv_string))
-
-	r_l_obj = s3.get_object(Bucket = 'superstoreapp' , Key = 'all_pred.csv')
-	r_l_body=r_l_obj['Body']
-	r_l_csv_string = r_l_body.read().decode('utf-8')
-	all_pred=pd.read_csv(StringIO(r_l_csv_string))
 
 
-	top_obj = s3.get_object(Bucket = 'superstoreapp' , Key = 'reg_top_lost.csv')
-	top_body=top_obj['Body']
-	top_csv_string = top_body.read().decode('utf-8')
-	reg_lost=pd.read_csv(StringIO(top_csv_string))
+	pass_data=pd.read_csv('Passwords.csv')
 
-	
-	popular_obj = s3.get_object(Bucket = 'superstoreapp' , Key = 'df_popular.csv')
-	popular_body=popular_obj['Body']
-	popular_csv_string = popular_body.read().decode('utf-8')
-	popular=pd.read_csv(StringIO(popular_csv_string))
 
-	group_data_obj = s3.get_object(Bucket = 'superstoreapp' , Key = 'output_df.csv')
-	group_data_body=group_data_obj['Body']
-	group_data_csv_string = group_data_body.read().decode('utf-8')
-	group_data=pd.read_csv(StringIO(group_data_csv_string))
+
+	all_pred=pd.read_csv('all_pred.csv')
+
+
+
+	reg_lost=pd.read_csv('reg_top_lost.csv')
+
+
+
+
+	popular=pd.read_csv('df_popular.csv')
+
+
+	group_data=pd.read_csv('output_df.csv')
 
 
 	pass_data['Customer_ID']=pass_data['Customer_ID'].astype(str)
 
 	data = pd.merge(all_pred,reg_lost.groupby(['Category','Sub-Category','ProductName','ProductID']).count().reset_index()[['Category','Sub-Category','ProductName','ProductID']],how = 'inner', left_on = 'itemID', right_on='ProductID')
-	data = pd.merge(data,reg_lost.groupby(['Customer_ID','Customer_Name']).count().reset_index()[['Customer_ID','Customer_Name']],how = 'inner', left_on = 'userID', right_on='Customer_ID')[['ProductID','ProductName','Category','Sub-Category','Customer_ID','Customer_Name','prediction']]			
+	data = pd.merge(data,reg_lost.groupby(['Customer_ID','Customer_Name']).count().reset_index()[['Customer_ID','Customer_Name']],how = 'inner', left_on = 'userID', right_on='Customer_ID')[['ProductID','ProductName','Category','Sub-Category','Customer_ID','Customer_Name','prediction']]
 
 	data = pd.merge(data,group_data,how = 'inner',on='ProductName')[['ProductID','ProductName','Category','Sub-Category','Customer_ID','Customer_Name','prediction','Group']]
 	data = data.sort_values(by=['prediction'], ascending = False)
 
 	product = data.groupby(['ProductID','ProductName','Category','Sub-Category','Group']).count().reset_index()[['ProductID','ProductName','Category','Sub-Category','Group']]
 
-	
+
 
 	#title=st.title("SuperStore App")
 	#st.markdown(f"<span style='color: blue;font-size: 24px;font-weight: bold;'>{'SuperStore App'}</span>", unsafe_allow_html=True)
@@ -96,7 +87,7 @@ def main():
 
 	products_cat=['All','Office Supplies','Furniture','Technology']
 
-	 
+
 	if choice == "WelcomePage":
 		bgcolor="#010000"
 		fontcolor = "#fff"
@@ -116,7 +107,7 @@ def main():
 		#st.markdown("<p style='text-align: center; color: red;'>Some title</p>", unsafe_allow_html=True)
 
 		st.markdown('<style>h1 { font-size: 72px;background: -webkit-linear-gradient(#0e97d8, #24576f);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}</style>', unsafe_allow_html=True)
-		
+
 		#st.title("Welcome to SuperStore!")
 		st.markdown('<style>h2 { font-size: 72px;background: -webkit-linear-gradient(#0e97d8, #24576f);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}</style>', unsafe_allow_html=True)
 		st.markdown(" We help you find the products you need!")
@@ -127,13 +118,13 @@ def main():
 		st.header("You can search for products you like")
 		st.markdown("We also recommend items you may want to see based on your search")
 
-	elif choice == "Login":		
+	elif choice == "Login":
 		#users = pass_data['Customer_ID'].unique().tolist()
 		username = st.sidebar.text_input("User Name")
 		password = st.sidebar.text_input("Password",type = 'password')
 		x=pass_data[pass_data['Customer_ID']==username]
 		lbtn=st.sidebar.button("Login")
- 
+
 		if lbtn:
 			if x.empty:
 				st.warning("Invalid User Name/Password")
@@ -149,7 +140,7 @@ def main():
 				st.dataframe(user_top_k[['ProductID','ProductName','Category','Sub-Category']].head(10))
 			elif((x.iloc[0].Customer_ID!=username) | (x.iloc[0].Password!=password)):
 				st.warning("Invalid User Name/Password")
-			
+
 
 
 	elif choice == "Search":
@@ -160,7 +151,7 @@ def main():
 
 
 		if st.button("Search"):
-			
+
 			if prod.empty:
 				st.warning("No results found")
 			elif(search == prod.iloc[0].ProductName==search):
@@ -194,6 +185,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-
-
