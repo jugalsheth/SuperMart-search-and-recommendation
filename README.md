@@ -62,7 +62,9 @@ Created a Document Term Matrix using TF-IDF to extract vectors
 Using cosine similarity we calculated proximity between strings
 Based on similarity values we created product groups
 
+# Application 
 
-# Streamllit
+- Used Streamlit to host a website using the output from the recommendation model as well as search
+- After hosting created an Image in Docker and pushed the Docker container to Heroku for deploying the app
 
 https://supermart-jugal.herokuapp.com/
