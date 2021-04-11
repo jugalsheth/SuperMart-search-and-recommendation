@@ -53,9 +53,16 @@ Based on the predicted ratings we recommended top-k items to a particular user.
 For new users as we do not have their preferences we recommend most popular products.
 We check for products which are most purchased and are highly rated to recommend those for new users
 Search
+
+
 Users can find the products they are looking for using the Search feature
 The search feature also lists the products similar to the items being searched
 Used text processing to find similar products.
 Created a Document Term Matrix using TF-IDF to extract vectors
 Using cosine similarity we calculated proximity between strings
 Based on similarity values we created product groups
+
+
+# Streamllit
+
+https://supermart-jugal.herokuapp.com/
