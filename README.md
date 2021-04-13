@@ -67,4 +67,8 @@ Based on similarity values we created product groups
 - Used Streamlit to host a website using the output from the recommendation model as well as search
 - After hosting created an Image in Docker and pushed the Docker container to Heroku for deploying the app
 
+Credentials(for logging in the app)
+- Id: 1 or 2 or 3 
+- PW: SuperStore
+- 
 https://supermart-jugal.herokuapp.com/
