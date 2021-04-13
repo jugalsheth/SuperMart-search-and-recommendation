@@ -70,5 +70,5 @@ Based on similarity values we created product groups
 Credentials(for logging in the app)
 - Id: 1 or 2 or 3 
 - PW: SuperStore
-- 
+
 https://supermart-jugal.herokuapp.com/
